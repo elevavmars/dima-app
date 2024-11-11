@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Dima.Api.Data;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
@@ -98,8 +99,31 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
         }
     }
 
-    public Task<Response<List<Category>>> GetAllByIdAsync(GetAllCategoriesRequest request)
+    public async Task<PagedResponse<List<Category>>> GetAllAsync(GetAllCategoriesRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var query = context
+                .Categories
+                .AsNoTracking()
+                .Where(x => x.UserId == request.UserId);
+
+            var categories = await query
+                .Skip(request.PageSize * request.PageNumber)
+                .Take(request.PageSize)
+                .ToListAsync();
+
+            var count = await query.CountAsync();
+
+            return new PagedResponse<List<Category>>(
+                categories,
+                count,
+                request.PageNumber,
+                request.PageSize);
+        }
+        catch
+        {
+            return new PagedResponse<List<Category>>(null, 500, "Não foi possivel consultar as categorias");
+        }
     }
 }
