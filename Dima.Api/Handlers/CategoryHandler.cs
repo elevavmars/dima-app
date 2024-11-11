@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using Dima.Api.Data;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
