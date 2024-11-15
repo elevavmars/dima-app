@@ -105,10 +105,11 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
             var query = context
                 .Categories
                 .AsNoTracking()
-                .Where(x => x.UserId == request.UserId);
+                .Where(x => x.UserId == request.UserId)
+                .OrderBy(x => x.Title);
 
             var categories = await query
-                .Skip(request.PageSize * request.PageNumber)
+                .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
                 .ToListAsync();
 
