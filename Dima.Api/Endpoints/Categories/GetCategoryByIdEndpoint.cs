@@ -1,3 +1,4 @@
+using Dima.Api.Common.Api;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
@@ -5,7 +6,7 @@ using Dima.Core.Responses;
 
 namespace Dima.Api.Endpoints.Categories;
 
-public class GetCategoryByIdEndpoint
+public class GetCategoryByIdEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
         => app.MapGet("/{id}", HandleAsync)
